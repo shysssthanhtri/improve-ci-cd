@@ -1,0 +1,22 @@
+on:
+  push:
+    branches:
+      - "*"
+jobs:
+  CI:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup NodeJS environment
+        uses: actions/setup-node@v3
+      - name: Install pnpm
+        run: npm i -g pnpm
+      - name: Lint
+        run: pnpm run lint
+      - name: Unit test
+        run: pnpm run test
+      - name: e2e test
+        run: pnpm run test:e2e
+      - name: Build
+        run: pnpm run build
