@@ -1,2 +1,2 @@
 develop:
-	docker compose -f ./docker/local/docker-compose.yml up
+	docker compose -f ./docker/docker-compose.yml up
