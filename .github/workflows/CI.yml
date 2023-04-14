@@ -42,15 +42,38 @@ jobs:
   #       run: pnpm run test:e2e
   #     - name: Build
   #       run: pnpm run build
-  CI:
+  # CI:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - uses: pnpm/action-setup@v2
+  #       with:
+  #         version: latest
+  #     - uses: actions/setup-node@v3
+  #       with:
+  #         cache: 'pnpm'
+  #     - run: pnpm install --no-frozen-lockfile
+  #     - run: pnpm test
+  TruffleHog:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: pnpm/action-setup@v2
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: TruffleHog OSS
+        uses: trufflesecurity/trufflehog@main
         with:
-          version: latest
+          path: ./
+          extra_args: --debug --only-verified
+  Lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
           cache: 'pnpm'
-      - run: pnpm install --no-frozen-lockfile
-      - run: pnpm test
+      - uses: pnpm/action-setup@v2
+        with:
+          version: latest
+      - name: Install dependencies
+        run: pnpm install --no-frozen-lockfile
