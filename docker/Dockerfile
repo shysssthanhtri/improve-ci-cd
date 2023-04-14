@@ -22,7 +22,7 @@ COPY ./package.json .
 COPY ./pnpm-lock.yaml .
 RUN pnpm install -P
 
-FROM alpine:latest AS production
+FROM alpine AS production
 WORKDIR /app
 RUN apk add --no-cache nodejs
 COPY --from=dev /app/dist /app/dist
