@@ -54,6 +54,7 @@ jobs:
   #         cache: 'pnpm'
   #     - run: pnpm install --no-frozen-lockfile
   #     - run: pnpm test
+
   TruffleHog:
     runs-on: ubuntu-latest
     steps:
@@ -64,7 +65,8 @@ jobs:
         with:
           path: ./
           extra_args: --debug --only-verified
-  Lint:
+
+  Lint-eslint:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -77,3 +79,21 @@ jobs:
           cache: 'pnpm'
       - name: Install dependencies
         run: pnpm install --no-frozen-lockfile
+      - name: Lint
+        run: pnpm run lint:eslint
+
+  Lint-tsc:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v2
+        with:
+          version: latest
+      - uses: actions/setup-node@v3
+        with:
+          cache: 'pnpm'
+      - name: Install dependencies
+        run: pnpm install --no-frozen-lockfile
+      - name: Lint
+        run: pnpm run lint:tsc
