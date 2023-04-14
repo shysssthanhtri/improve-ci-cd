@@ -3,123 +3,36 @@ on:
     branches:
       - "*"
 jobs:
-  # Checkout:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v3
-  # TruffleHog:
-  #   runs-on: ubuntu-latest
-  #   needs:
-  #     - Checkout
-  #   steps:
-  #     - name: TruffleHog OSS
-  #       uses: trufflesecurity/trufflehog@main
-  #       with:
-  #         path: ./
-  #         extra_args: --debug --only-verified
-  # CI:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v3
-  #     - name: Setup NodeJS environment
-  #       uses: actions/setup-node@v3
-  #     - name: TruffleHog OSS
-  #       uses: trufflesecurity/trufflehog@main
-  #       with:
-  #         path: ./
-  #         extra_args: --debug --only-verified
-  #     - name: Install pnpm
-  #       run: npm i -g pnpm
-  #     - name: Install dependencies
-  #       run: pnpm install --no-frozen-lockfile
-  #     - name: Lint
-  #       run: pnpm run lint
-  #     - name: Unit test
-  #       run: pnpm run test
-  #     - name: e2e test
-  #       run: pnpm run test:e2e
-  #     - name: Build
-  #       run: pnpm run build
-  # CI:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v3
-  #     - uses: pnpm/action-setup@v2
-  #       with:
-  #         version: latest
-  #     - uses: actions/setup-node@v3
-  #       with:
-  #         cache: 'pnpm'
-  #     - run: pnpm install --no-frozen-lockfile
-  #     - run: pnpm test
-
-  TruffleHog:
+  CI:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+
       - name: TruffleHog OSS
         uses: trufflesecurity/trufflehog@main
         with:
           path: ./
           extra_args: --debug --only-verified
 
-  Lint-eslint:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - name: Setup NodeJS environment
+        uses: actions/setup-node@v3
+
       - uses: pnpm/action-setup@v2
         with:
           version: latest
-      - uses: actions/setup-node@v3
-        with:
-          cache: 'pnpm'
-      - name: Get pnpm store directory
-        id: pnpm-cache
-        shell: bash
-        run: |
-          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
 
-      - uses: actions/cache@v3
-        name: Setup pnpm cache
-        with:
-          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-store-
       - name: Install dependencies
         run: pnpm install --no-frozen-lockfile
-      - name: Lint
-        run: pnpm run lint:eslint
 
-  Lint-tsc:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - uses: pnpm/action-setup@v2
-        with:
-          version: latest
-      - uses: actions/setup-node@v3
-        with:
-          cache: 'pnpm'
-      - name: Get pnpm store directory
-        id: pnpm-cache
-        shell: bash
-        run: |
-          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
-
-      - uses: actions/cache@v3
-        name: Setup pnpm cache
-        with:
-          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-store-
-      - name: Install dependencies
-        run: pnpm install --no-frozen-lockfile
       - name: Lint
-        run: pnpm run lint:tsc
+        run: pnpm run lint
+
+      - name: Unit test
+        run: pnpm run test
+
+      - name: e2e test
+        run: pnpm run test:e2e
+      
+      - name: Build
+        run: pnpm run build
