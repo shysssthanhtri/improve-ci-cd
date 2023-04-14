@@ -15,12 +15,14 @@ jobs:
           path: ./
           extra_args: --debug --only-verified
 
-      - name: Setup NodeJS environment
-        uses: actions/setup-node@v3
-
       - uses: pnpm/action-setup@v2
         with:
           version: latest
+          
+      - name: Setup NodeJS environment
+        uses: actions/setup-node@v3
+        with:
+          cache: 'pnpm'
 
       - name: Install dependencies
         run: pnpm install --no-frozen-lockfile
