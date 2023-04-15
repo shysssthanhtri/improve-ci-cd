@@ -44,5 +44,5 @@ jobs:
         with:
           host: http://34.67.59.219:9000
           login: sqp_be1efc11519afd01aca3d4d7ab5cde6e78b6db4c
-          projectBaseDir: "src/"
+          # projectBaseDir: "src/"
           projectKey: "Test-SonarQueue"
